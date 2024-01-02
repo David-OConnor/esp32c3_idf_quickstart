@@ -1,0 +1,30 @@
+[build]
+target = "riscv32imc-esp-espidf"
+
+[target.riscv32imc-esp-espidf]
+linker = "ldproxy"
+runner = "espflash flash --monitor"
+#runner = "probe-rs run --chip esp32c3" # to list chips, run `probe-rs chip list.`
+
+rustflags = [
+    "--cfg", "espidf_time64",
+    "-C", "default-linker-libraries",
+    #  "-C", "linker=flip-link",
+    #  "-C", "link-arg=-Tlink.x",
+    #  "-C", "link-arg=-Tdefmt.x",
+    #  # This is needed if your flash or ram addresses are not aligned to 0x10000 in memory.x
+    #  # See https://github.com/rust-embedded/cortex-m-quickstart/pull/95
+    #  "-C", "link-arg=--nmagic",
+]
+
+[unstable]
+build-std = ["std", "panic_abort"]
+#build-std = ["core", "alloc", "panic_abort"]
+
+[env]
+MCU="esp32c3"
+# Note: this variable is not used by the pio builder (`cargo build --features pio`)
+#ESP_IDF_VERSION = "master"
+ESP_IDF_VERSION = "v5.1.1"
+ESP_IDF_PATH_ISSUES = "ignore"  # Required on Windows
+

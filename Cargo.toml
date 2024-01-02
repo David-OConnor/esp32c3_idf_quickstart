@@ -1,0 +1,74 @@
+[package]
+name = "project_name"
+version = "0.1.0"
+authors = ["Your name <your@em.ail>"]
+edition = "2021"
+
+
+[dependencies]
+defmt = "^0.3.5"
+#defmt-rtt = "^0.4.0"
+log = { version = "0.4", default-features = false }
+esp-idf-svc = { version = "0.47.3", default-features = false }
+#esp-idf-hal = "0.42.5"
+#esp-idf-sys = "0.33.7"
+
+
+[features]
+default = ["std", "esp-idf-svc/native"]
+
+pio = ["esp-idf-svc/pio"]
+std = ["alloc", "esp-idf-svc/binstart", "esp-idf-svc/std"]
+alloc = ["esp-idf-svc/alloc"]
+nightly = ["esp-idf-svc/nightly"]
+experimental = ["esp-idf-svc/experimental"]
+#embassy = ["esp-idf-svc/embassy-sync", "esp-idf-svc/critical-section", "esp-idf-svc/embassy-time-driver"]
+
+[build-dependencies]
+embuild = "0.31.3"
+
+
+#[profile.release]
+#opt-level = "s"
+#
+#[profile.dev]
+#debug = true    # Symbols are nice and they don't increase the size on Flash
+#opt-level = "z"
+
+# cargo build/run
+[profile.dev]
+codegen-units = 1
+debug = 2
+debug-assertions = true # <-
+incremental = false
+opt-level = 3 # <-
+overflow-checks = true # <-
+
+# cargo test
+[profile.test]
+codegen-units = 1
+debug = 2
+debug-assertions = true # <-
+incremental = false
+opt-level = 3 # <-
+overflow-checks = true # <-
+
+# cargo build/run --release
+[profile.release]
+codegen-units = 1
+debug = 2
+debug-assertions = false # <-
+incremental = false
+lto = 'fat'
+opt-level = 3 # <-
+overflow-checks = false # <-
+
+# cargo test --release
+[profile.bench]
+codegen-units = 1
+debug = 2
+debug-assertions = false # <-
+incremental = false
+lto = 'fat'
+opt-level = 3 # <-
+overflow-checks = false # <-
